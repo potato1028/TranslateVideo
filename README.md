@@ -1,1 +1,34 @@
-# TranslateVideo
+# AI 유튜브 자막 생성기 (AI YouTube Subtitle Generator)
+
+사용자가 입력한 유튜브 URL의 오디오를 분석하여, **Gemini 2.5 Flash API**를 통해 맞춤형 한국어 자막을 생성하고 영상 위에 실시간으로 동기화하여 띄워주는 로컬 웹 서비스입니다.
+
+### 데모 영상
+
+## 주요 기능 (Key Features)
+
+* **유튜브 영상 실시간 자막 오버레이**
+  * YouTube IFrame API를 활용하여, 영상의 현재 재생 시간(currentTime)에 맞춰 AI가 생성한 자막을 화면 하단에 정확하게 동기화합니다.
+* **Gemini 2.5 Flash 기반 문맥 맞춤형 번역**
+  * `yt-dlp`를 이용해 영상의 오디오를 추출하고, Gemini API를 호출하여 높은 퀄리티의 한국어 번역 및 요약 자막을 생성합니다.
+* **사용자 맞춤형 '번역 테마' 시스템**
+  * 사용자가 "2D 플랫포머 게임 개발", "IT 기기 리뷰" 등 특정 테마를 입력하면, 백엔드에서 프롬프트를 동적으로 조작하여 해당 도메인에 맞는 자연스러운 전문 용어와 문맥으로 번역을 수행합니다.
+* **서버 리소스 및 파일 최적화**
+  * 보안 및 스토리지 최적화를 위해, 오디오 추출 및 API 전송이 완료된 즉시 로컬 임시 파일과 구글 스토리지의 파일을 자동 삭제하도록 설계했습니다.
+
+## 기술 스택 (Tech Stack)
+
+* **Backend:** Python 3, FastAPI, yt-dlp, Google GenAI SDK
+* **Frontend:** HTML5, CSS3, Vanilla JavaScript, YouTube IFrame API
+* **Environment:** macOS, Uvicorn, Local HTTP Server
+
+## 실행 방법 (Getting Started)
+
+본 프로젝트는 프론트엔드와 백엔드를 각각 독립된 로컬 서버로 구동합니다.
+
+**1. 백엔드 서버 실행 (API 및 AI 처리)**
+```bash
+# 필수 라이브러리 설치
+pip install fastapi uvicorn yt-dlp google-generativeai pydantic
+
+# 서버 실행 (포트: 8000)
+uvicorn server:app --reload
