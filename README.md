@@ -3,7 +3,13 @@
 사용자가 입력한 유튜브 URL의 오디오를 분석하여, **Gemini 2.5 Flash API**를 통해 맞춤형 한국어 자막을 생성하고 영상 위에 실시간으로 동기화하여 띄워주는 로컬 웹 서비스입니다.
 
 ### 데모 영상
-[![AI 유튜브 자막 생성기 데모 영상](https://youtu.be/OVYMIWnl-uA/maxresdefault.jpg)](https://youtu.be/OVYMIWnl-uA)
+<div align="center">
+  <a href="https://youtu.be/OVYMIWnl-uA">
+    <img src="https://img.youtube.com/vi/OVYMIWnl-uA/maxresdefault.jpg" alt="AI 유튜브 자막 생성기 데모 영상" width="800">
+  </a>
+  <br>
+  <sup>이미지를 클릭하면 데모 영상이 재생됩니다.</sup>
+</div>
 
 ## 주요 기능 (Key Features)
 
