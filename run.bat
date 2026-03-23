@@ -9,6 +9,6 @@ call venv\Scripts\activate
 pip install -r requirements.txt
 
 echo 3. 프로그램을 실행합니다...
-server.py
+uvicorn server:app --reload
 
 pause

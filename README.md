@@ -30,8 +30,6 @@
 
 ## 실행 방법 (Getting Started)
 
-## 실행 방법 (Getting Started)
-
 본 프로젝트는 사용자의 편의를 위해 복잡한 환경 설정 없이 **스크립트 실행 한 번으로 가상 환경 세팅, 필수 모듈 설치, 서버 구동이 자동으로 진행**되도록 구성되어 있습니다.
 
 ### 1. 프로젝트 다운로드 (Clone)
@@ -39,3 +37,19 @@
 ```bash
 git clone [https://github.com/potato1028/TranslateVideo.git](https://github.com/potato1028/TranslateVideo.git)
 cd TranslateVideo
+🪟 Windows 사용자
+
+프로젝트 폴더 내에 있는 run.bat 파일을 더블 클릭하여 실행합니다.
+
+또는 터미널(명령 프롬프트)에서 아래 명령어를 입력합니다.
+run.bat
+
+🍎 Mac / 🐧 Linux 사용자
+
+터미널을 열고 아래 명령어를 입력하여 스크립트에 실행 권한을 부여한 뒤 실행합니다.
+chmod +x run.sh
+./run.sh
+
+2. 프론트엔드 접속
+백엔드 서버가 정상적으로 실행된 상태에서, 브라우저를 열고 프로젝트 폴더 내의 index.html 파일을 열거나 로컬 웹 서버를 통해 접속하여 서비스를 이용할 수 있습니다.
+```
