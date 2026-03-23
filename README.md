@@ -30,12 +30,12 @@
 
 ## 실행 방법 (Getting Started)
 
-본 프로젝트는 프론트엔드와 백엔드를 각각 독립된 로컬 서버로 구동합니다.
+## 실행 방법 (Getting Started)
 
-**1. 백엔드 서버 실행 (API 및 AI 처리)**
+본 프로젝트는 사용자의 편의를 위해 복잡한 환경 설정 없이 **스크립트 실행 한 번으로 가상 환경 세팅, 필수 모듈 설치, 서버 구동이 자동으로 진행**되도록 구성되어 있습니다.
+
+### 1. 프로젝트 다운로드 (Clone)
+먼저 프로젝트를 로컬 컴퓨터로 다운로드하고 해당 폴더로 이동합니다.
 ```bash
-# 필수 라이브러리 설치
-pip install fastapi uvicorn yt-dlp google-generativeai pydantic
-
-# 서버 실행 (포트: 8000)
-uvicorn server:app --reload
+git clone [https://github.com/potato1028/TranslateVideo.git](https://github.com/potato1028/TranslateVideo.git)
+cd TranslateVideo
