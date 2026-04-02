@@ -69,7 +69,6 @@
             color: #007bff;
         }
 
-        /* 비디오 및 자막 */
         .video-container {
             position: relative;
             width: 100%;
@@ -137,7 +136,7 @@
         let player;
         let subtitles = [];
         let subtitleInterval;
-        let pipWindow = null; // PIP 창 상태 저장 변수
+        let pipWindow = null;
 
         function extractVideoID(url) {
             const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
@@ -204,11 +203,15 @@
                     throw new Error("자막을 추출하였지만 정해진 타임 스탬프 형식을 찾지 못했습니다.");
                 }
 
+                localStorage.setItem('savedApiKey', apiKey);
+                localStorage.setItem('savedVideoUrl', videoUrl);
+                localStorage.setItem('savedTheme', theme);
+                localStorage.setItem('savedSubtitles', JSON.stringify(subtitles));
+
                 statusEl.innerText = "✅ 자막 생성 완료! 영상이 재생됩니다.";
 
-                // 화면 보이기
                 document.getElementById('videoWrapper').style.display = 'block';
-                document.getElementById('pipBtn').style.display = 'block'; // 영상이 뜨면 PIP 버튼도 보이게 함
+                document.getElementById('pipBtn').style.display = 'block';
                 document.getElementById('subtitleText').style.display = 'block';
                 document.getElementById('subtitleText').innerText = '영상 재생 대기 중...';
 
@@ -254,13 +257,12 @@
                     if(currentText) {
                         document.getElementById('subtitleText').innerText = currentText;
                     }
-                }, 500);
+                }, 100);
             } else {
                 clearInterval(subtitleInterval);
             }
         }
 
-        // --- PIP 통째로 넘기기 로직 ---
         async function togglePiP() {
             if (!('documentPictureInPicture' in window)) {
                 alert("현재 브라우저에서는 Document PIP 기능을 지원하지 않습니다.\n(크롬 최신 버전을 사용해주세요)");
@@ -269,20 +271,22 @@
 
             const videoWrapper = document.getElementById('videoWrapper');
 
-            // 이미 열려있다면 닫기
             if (pipWindow) {
                 pipWindow.close();
                 return;
             }
 
             try {
-                // 새로운 PIP 창 요청
                 pipWindow = await window.documentPictureInPicture.requestWindow({
                     width: videoWrapper.clientWidth,
                     height: videoWrapper.clientHeight,
                 });
-
-                // 부모 창의 CSS 스타일 복사
+                
+                const meta = document.createElement('meta');
+                meta.name = "referrer";
+                meta.content = "strict-origin-when-cross-origin";
+                pipWindow.document.head.appendChild(meta);
+                
                 [...document.styleSheets].forEach((styleSheet) => {
                     try {
                         const cssRules = [...styleSheet.cssRules].map((rule) => rule.cssText).join('');
@@ -294,10 +298,8 @@
                     }
                 });
 
-                // 비디오 래퍼를 PIP 창으로 이동! (이 순간 영상이 살짝 새로고침 될 수 있음)
                 pipWindow.document.body.appendChild(videoWrapper);
 
-                // 사용자가 PIP 창을 닫으면 원래 자리로 복원
                 pipWindow.addEventListener("pagehide", (event) => {
                     document.body.appendChild(videoWrapper);
                     pipWindow = null;
@@ -306,6 +308,46 @@
             } catch (error) {
                 console.error("PIP 오류:", error);
                 alert("PIP 모드를 실행하는 중 오류가 발생했습니다.");
+            }
+        }
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedApiKey = localStorage.getItem('savedApiKey');
+            const savedVideoUrl = localStorage.getItem('savedVideoUrl');
+            const savedTheme = localStorage.getItem('savedTheme');
+            const savedSubtitles = localStorage.getItem('savedSubtitles');
+
+            if (savedApiKey) document.getElementById('apiKey').value = savedApiKey;
+            if (savedVideoUrl) document.getElementById('videoUrl').value = savedVideoUrl;
+            if (savedTheme) document.getElementById('theme').value = savedTheme;
+
+            if (savedVideoUrl && savedSubtitles) {
+                subtitles = JSON.parse(savedSubtitles);
+                
+                document.getElementById('videoWrapper').style.display = 'block';
+                document.getElementById('pipBtn').style.display = 'block';
+                document.getElementById('subtitleText').style.display = 'block';
+                document.getElementById('subtitleText').innerText = '💾 이전 자막 데이터를 불러왔습니다. 재생을 눌러주세요.';
+                document.getElementById('status').innerText = "✅ 저장된 자막 세팅 완료!";
+            }
+        });
+
+        function onYouTubeIframeAPIReady() {
+            const savedVideoUrl = localStorage.getItem('savedVideoUrl');
+            const savedSubtitles = localStorage.getItem('savedSubtitles');
+
+            if (savedVideoUrl && savedSubtitles) {
+                const videoId = extractVideoID(savedVideoUrl);
+                player = new YT.Player('player', {
+                    height: '100%',
+                    width: '100%',
+                    videoId: videoId,
+                    playerVars: {
+                        'origin': window.location.origin
+                    },
+                    events: {
+                        'onStateChange': onPlayerStateChange
+                    }
+                });
             }
         }
     </script>
